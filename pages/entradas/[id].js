@@ -1,5 +1,3 @@
-import Styles from '../../styles/Proyectos.module.css'
-
 export const getStaticPaths = async () =>{
     const res = await fetch('http://localhost/wordpress/wp-json/wp/v2/posts/');
     const data = await res.json();
@@ -18,15 +16,18 @@ export const getStaticPaths = async () =>{
 
 export const getStaticProps = async (context) => {
     const id = context.params.id;
-    const res = await fetch('http://localhost/wordpress/wp-json/wp/v2/posts/' + id);
-    const data = await(res.json());
-
+    const resPost = await fetch('http://localhost/wordpress/wp-json/wp/v2/posts/' + id);
+    const dataPost = await(resPost.json());
+    
+    const resMedia = await fetch('http://localhost/wordpress/wp-json/wp/v2/media/' + resPost.featured_media);
+    const dataMedia = await(resMedia.json());
+    
     return {
-        props: {entrada: data}
+        props: {entrada: dataPost, entrada1: dataMedia}
     }
 }
 
-const Details = ( { entrada } ) => {
+const Details = ( { entrada, entrada1 } ) => {
     return ( 
         <div>
             <h1>{entrada.title.rendered}</h1>
@@ -35,7 +36,8 @@ const Details = ( { entrada } ) => {
             <p><strong>Texto: </strong>{entrada.content.rendered}</p>
             <p><strong>Categoria: </strong>{entrada.categories}</p>
             <p><strong>Tags: </strong>{entrada.tags}</p>
-            {/* <p><strong>Foto: </strong>{entrada._links.ws.featuredmedia}</p> */}
+            <p><strong>Foto:</strong></p>
+            <img src={entrada1.source_url} width={100} height={100}/>
             <p><strong>Autor: </strong>{entrada.author}</p>
         </div>
     );
