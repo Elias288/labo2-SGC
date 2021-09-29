@@ -34,7 +34,8 @@ const Details = ( { proyecto } ) => {
             <p><strong>Fecha: </strong>{proyecto.date}</p>
             <p><strong>Estado: </strong>{proyecto.status}</p>
             <p><strong>Tipo: </strong>{proyecto.type}</p>
-            <p><strong>Contenido: </strong>{proyecto.content.rendered}</p>
+            <p><strong>Contenido: </strong></p>
+            <div dangerouslySetInnerHTML={{__html: proyecto.content.rendered}}></div>
         </div>
     );
 }
